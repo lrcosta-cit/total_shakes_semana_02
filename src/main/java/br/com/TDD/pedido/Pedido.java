@@ -1,6 +1,12 @@
 package br.com.TDD.pedido;
 
+import br.com.TDD.ingredientes.Adicional;
+import br.com.TDD.pedido.Cardapio;
+import br.com.TDD.pedido.Cliente;
+import br.com.TDD.pedido.ItemPedido;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class Pedido{
 
@@ -26,22 +32,73 @@ public class Pedido{
         return this.cliente;
     }
 
-    public double calcularTotal(Cardapio cardapio){
-        double total= 0;
-        //TODO
+    public double calcularTotal(Cardapio cardapio) {
+        double total = 0;
+        double parcial = 0;
+        for (ItemPedido itemPedido : itens) {
+            if (itemPedido.getShake() != null) {
+                if (itemPedido.getShake().getBase() != null) {
+                    if (cardapio.getPrecos().containsKey(itemPedido.getShake().getBase())) {
+                        parcial += cardapio.getPrecos().get(itemPedido.getShake().getBase());
+                    }
+                }
+                if (itemPedido.getShake().getTipoTamanho() != null) {
+                    parcial *= itemPedido.getShake().getTipoTamanho().getMultiplicador();
+                }
+
+                if (!itemPedido.getShake().getAdicionais().isEmpty()) {
+                    List<Adicional> adicionais = itemPedido.getShake().getAdicionais();
+                    for (Adicional adicional : adicionais) {
+                        if (cardapio.getPrecos().containsKey(adicional)) {
+                            parcial += cardapio.getPrecos().get(adicional);
+                        }
+                    }
+                }
+
+                if (itemPedido.getQuantidade() > 1) {
+                    parcial *= itemPedido.getQuantidade();
+                }
+            }
+            total += parcial;
+            parcial = 0;
+        }
+
         return total;
     }
 
-    public void adicionarItemPedido(ItemPedido itemPedidoAdicionado){
-        //TODO
+    public void adicionarItemPedido(ItemPedido itemPedidoAdicionado) {
+        boolean itemExists = false;
+        if (itemPedidoAdicionado != null) {
+            for (ItemPedido itemPedido : this.itens) {
+                if (itemPedido.getShake().equals(itemPedidoAdicionado.getShake())) {
+                    itemPedido.setQuantidade(itemPedido.getQuantidade() + itemPedidoAdicionado.getQuantidade());
+                    itemExists = true;
+                }
+            }
+            if (!itemExists) {
+                this.itens.add(itemPedidoAdicionado);
+            }
+        }
     }
 
+
     public boolean removeItemPedido(ItemPedido itemPedidoRemovido) {
-        //substitua o true por uma condição
-        if (true) {
-            //TODO
-        } else {
-            throw new IllegalArgumentException("Item nao existe no pedido.");
+        if (itemPedidoRemovido != null) {
+            if (!this.itens.isEmpty()) {
+                for (ItemPedido itemPedido : this.itens) {
+                    if (itemPedido.getShake().toString().equals(itemPedidoRemovido.getShake().toString())) {
+                        if (itemPedido.getQuantidade() > 1) {
+                            itemPedido.setQuantidade(itemPedido.getQuantidade() - 1);
+                        } else {
+                            this.itens.remove(itemPedido);
+                        }
+                        break;
+                    } else {
+                        throw new IllegalArgumentException("Item nao existe no pedido.");
+                    }
+                }
+            }
+
         }
         return false;
     }

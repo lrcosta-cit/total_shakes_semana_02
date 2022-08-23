@@ -34,12 +34,40 @@ public class ArmazemTest {
 
         //when
         armazem.cadastrarIngredienteEmEstoque(ingrediente);
-        armazem.cadastrarIngredienteEmEstoque(ingrediente);
-
-        //then
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        Exception e = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            armazem.cadastrarIngredienteEmEstoque(ingrediente);
         });
 
+        //then
+        Assertions.assertEquals("Ingrediente já cadastrado", e.getMessage());
+
+    }
+
+    @Test
+    public void deveDescadastrarUmIngredienteDoEstoque() {
+        //given
+        Ingrediente ingrediente = new Base(TipoBase.Iorgute);
+        armazem.getEstoque().put(ingrediente, 0);
+
+        //when
+        armazem.descadastrarIngredienteEmEstoque(ingrediente);
+
+        //then
+        Assertions.assertEquals(0, armazem.getEstoque().size());
+    }
+
+    @Test
+    public void deveRetornarExcecaoAoDescadastrarUmIngredienteNaoExistenteNoEstoque() {
+        //given
+        Ingrediente ingrediente = new Base(TipoBase.Iorgute);
+
+        //when
+        Exception e = Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            armazem.descadastrarIngredienteEmEstoque(ingrediente);
+        });
+
+        //then
+        Assertions.assertEquals("Ingrediente não encontrado", e.getMessage());
     }
 
 }

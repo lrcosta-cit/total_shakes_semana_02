@@ -1,20 +1,44 @@
 package armazem;
 
 import br.com.TDD.armazem.Armazem;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import br.com.TDD.ingredientes.Base;
+import br.com.TDD.ingredientes.Ingrediente;
+import br.com.TDD.ingredientes.TipoBase;
+import org.junit.jupiter.api.*;
 
 public class ArmazemTest {
 
     Armazem armazem;
 
-    @BeforeAll
-    public void setup(){
+    @BeforeEach
+    void setup(){
         armazem = new Armazem();
     }
 
     @Test
-    public void adicionarIngredienteTest(){
+    public void deveCadastrarUmIngredienteNoEstoque() {
+        //given
+        Ingrediente ingrediente = new Base(TipoBase.Sorvete);
+
+        //when
+        armazem.cadastrarIngredienteEmEstoque(ingrediente);
+
+        //then
+        Assertions.assertEquals(1, armazem.getEstoque().size());
+    }
+
+    @Test
+    public void deveRetornarExcecaoQuandoCadastrarUmIngredienteJaExistenteNoEstoque() {
+        //given
+        Ingrediente ingrediente = new Base(TipoBase.Sorvete);
+
+        //when
+        armazem.cadastrarIngredienteEmEstoque(ingrediente);
+        armazem.cadastrarIngredienteEmEstoque(ingrediente);
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        });
 
     }
 

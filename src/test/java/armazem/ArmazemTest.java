@@ -6,7 +6,6 @@ import br.com.TDD.exceptions.IngredienteNotFoundException;
 import br.com.TDD.ingredientes.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

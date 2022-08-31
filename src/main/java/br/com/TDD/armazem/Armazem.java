@@ -16,6 +16,10 @@ public class Armazem {
         this.estoque = estoque;
     }
 
+    public TreeMap<Ingrediente, Integer> getEstoque() {
+        return estoque;
+    }
+
     public void cadastrarIngredienteEmEstoque(Ingrediente ingrediente) {
 
     }
@@ -36,8 +40,6 @@ public class Armazem {
         return 0;
     }
 
-    public TreeMap<Ingrediente, Integer> getEstoque() {
-        return estoque;
-    }
+
 
 }
